@@ -1,5 +1,5 @@
 -- =============================================================================
--- GRAPHITE PANEL (FULLY OPTIMIZED + 50% BIGGER)
+-- GRAPHITE PANEL (FULLY OPTIMIZED + 50% BIGGER + MOBILE SLIDER)
 -- =============================================================================
 
 -- DELETE PREVIOUS INSTANCES
@@ -280,14 +280,27 @@ UIS.InputBegan:Connect(function(input, gp)
     end
 end)
 
+-- MOBILE + PC SLIDER
 local dragging = false
+local dragInput = nil
 
 SliderButton.InputBegan:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 then dragging = true end
+    if input.UserInputType == Enum.UserInputType.MouseButton1
+    or input.UserInputType == Enum.UserInputType.Touch then
+        dragging = true
+        dragInput = input
+    end
+end)
+
+SliderButton.InputEnded:Connect(function(input)
+    if input == dragInput then
+        dragging = false
+        dragInput = nil
+    end
 end)
 
 UIS.InputChanged:Connect(function(input)
-    if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+    if input == dragInput and dragging then
         local pos = input.Position.X
         local base = SliderTrack.AbsolutePosition.X
         local size = SliderTrack.AbsoluteSize.X
@@ -301,10 +314,6 @@ UIS.InputChanged:Connect(function(input)
 
         SpeedLabel.Text = calculated .. " " .. EngineState.ModeSelection
     end
-end)
-
-UIS.InputEnded:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 then dragging = false end
 end)
 
 UpdateUI()
