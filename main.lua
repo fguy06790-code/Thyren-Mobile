@@ -38,7 +38,7 @@ local function Round(obj, r)
     c.Parent = obj
 end
 
-local SCALE = 1
+local SCALE = 1.5
 local function FireParry()
     VIM:SendKeyEvent(true, EngineState.SpamKey, false, nil)
     VIM:SendKeyEvent(false, EngineState.SpamKey, false, nil)
